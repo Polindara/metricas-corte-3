@@ -1,0 +1,89 @@
+package metricas;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Random;
+import java.util.Scanner;
+
+public class bucketSort {
+	
+	static int Limite = 1000000; //aqui se define el tamaño del arreglo
+	static int numVeces=0;
+	
+	public static void main(String[] args) {
+		//declaramos el numero de veces que queremos que el programa nos organice el arreglo 
+		System.out.println("¿Cuantas veces desea ejecutar el programa?: ");
+		Scanner numVecesEjecuta = new Scanner(System.in);
+		numVeces = Integer.parseInt(numVecesEjecuta.nextLine());
+		numVecesEjecuta.close();
+		
+		int arreglo[] = new int[Limite];;
+		
+		int[] arreglo2 = {};
+		int[] arreglo3 = {};
+		bucketSort(arreglo, Limite);
+		
+	}
+	/**Necesita saber cual es al valor maimo del array
+	 * @param arreglo
+	 * @param maxValue
+	 */
+	
+	public static void bucketSort(int[] arreglo, int maxValue) {
+		double TotalTiempo=0;
+		long Inicio=0;
+		List<Double> listaSuma = new ArrayList<Double>();
+		
+		for(int k=0;k<10;k++) {
+		for(int i=0;i<numVeces;i++) {
+			LlenaAzar(arreglo);
+			Inicio = System.currentTimeMillis(); 
+			metodoBucketSort(arreglo, maxValue);
+			TotalTiempo += System.currentTimeMillis() - Inicio;
+		}
+		listaSuma.add(TotalTiempo);
+		}
+		double suma = 0;
+        for (int n=0;n<listaSuma.size();n++)
+        {
+            Double valor;
+            valor = listaSuma.get(n);
+            suma += valor;
+        }
+        int resultado =  (int) suma;
+        
+        System.out.println("promedio de 10 veces realizado es: " +resultado/10);//promedio
+        System.out.println(listaSuma);
+		System.out.println("Total tiempo en milisegundos: " + TotalTiempo);
+		
+		
+	}
+	
+	static void metodoBucketSort(int[] arreglo, int maxValue) {
+		int[] bucket = new int[maxValue+1];
+				
+		for(int i=0; i<bucket.length;i++) {
+			bucket[i]=0;
+		}
+		
+		for(int i=0;i<arreglo.length;i++) {
+			bucket[arreglo[i]] = bucket[arreglo[i]]++;
+		}
+		int outPos=0;
+		for(int i=0;i<bucket.length;i++) {
+			for(int j=0;j<bucket[i];j++) {
+				arreglo[outPos--]=i;
+			}
+		}
+	}
+
+	
+	static void LlenaAzar(int numerosA[]) {
+		Random Azar = new Random();
+		for (int cont = 0; cont < numerosA.length; cont++) {
+			numerosA[cont] = Azar.nextInt(Limite);
+		}
+	}
+
+}
